@@ -250,7 +250,7 @@ export default BaseStore.extend({
       expires: isEmpty(expiration) ? null : new Date(expiration),
       path: this.get('cookiePath'),
       secure: this.get('_secureCookies'),
-      SameSite: this.get('sameSite')
+      sameSite: this.get('sameSite')
     };
     if (this._oldCookieName) {
       A([this._oldCookieName, `${this._oldCookieName}-expiration_time`]).forEach((oldCookie) => {
