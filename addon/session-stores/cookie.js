@@ -63,7 +63,7 @@ export default BaseStore.extend({
    * @default null
    * @public
   */
-  sameSite: 'Lax',
+  sameSite: null,
 
   /**
     The name of the cookie.
