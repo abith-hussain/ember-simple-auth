@@ -55,6 +55,17 @@ export default BaseStore.extend({
   cookieDomain: null,
 
   /**
+   * Chrome will treat cookies as SameSite=Lax if no SameSite attribute is provided
+   * you can override this in the child class
+   *
+   * @property sameSite
+   * @type String
+   * @default null
+   * @public
+  */
+  sameSite: 'Lax',
+
+  /**
     The name of the cookie.
 
     @property cookieName
@@ -158,10 +169,11 @@ export default BaseStore.extend({
     let domain      = Ember.isEmpty(this.cookieDomain) ? '' : `; domain=${this.cookieDomain}`;
     let expires     = Ember.isEmpty(expiration) ? '' : `; expires=${new Date(expiration).toUTCString()}`;
     let secure      = !!this._secureCookies ? ';secure' : '';
-    document.cookie = `${this.cookieName}=${encodeURIComponent(value)}${domain}${path}${expires}${secure}`;
+    let sameSite    = `; SameSite=${this.sameSite}`;
+    document.cookie = `${this.cookieName}=${encodeURIComponent(value)}${domain}${path}${expires}${secure}${sameSite}`;
     if (expiration !== null) {
       let cachedExpirationTime = this._read(`${this.cookieName}:expiration_time`);
-      document.cookie = `${this.cookieName}:expiration_time=${encodeURIComponent(this.cookieExpirationTime || cachedExpirationTime)}${domain}${path}${expires}${secure}`;
+      document.cookie = `${this.cookieName}:expiration_time=${encodeURIComponent(this.cookieExpirationTime || cachedExpirationTime)}${domain}${path}${expires}${secure}${sameSite}`;
     }
   },
 
