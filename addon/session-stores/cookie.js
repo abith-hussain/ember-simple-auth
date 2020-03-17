@@ -100,6 +100,20 @@ export default BaseStore.extend({
   }),
 
   /**
+    Allows servers to assert that a cookie ought not to be sent along with cross-site requests,
+    which provides some protection against cross-site request forgery attacks (CSRF).
+    Available options:
+    - "Strict"
+    - "Lax"
+    @property sameSite
+    @type String
+    @default null
+    @public
+  */
+  _sameSite: null,
+  sameSite: persistingProperty(),
+
+  /**
     The path to use for the cookie, e.g., "/", "/something".
 
     @property cookiePath
@@ -235,7 +249,8 @@ export default BaseStore.extend({
       domain: this.get('cookieDomain'),
       expires: isEmpty(expiration) ? null : new Date(expiration),
       path: this.get('cookiePath'),
-      secure: this.get('_secureCookies')
+      secure: this.get('_secureCookies'),
+      sameSite: this.get('sameSite')
     };
     if (this._oldCookieName) {
       A([this._oldCookieName, `${this._oldCookieName}-expiration_time`]).forEach((oldCookie) => {
